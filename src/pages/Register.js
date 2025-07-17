@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import axios from 'axios';
+import {API_URL} from '../config'
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -16,8 +18,25 @@ const Register = () => {
       setError("Passwords do not match!");
       return;
     }
-    // Handle registration logic here
-    setSuccess("Registration successful!");
+    try {
+      axios.post(`${API_URL}/auth/register`, { email, password })
+        .then(response => {
+          setSuccess('Registration successful! Please log in.');
+          setEmail('');
+          setPassword('');
+          setConfirmPassword('');
+        })
+        .catch(err => {
+          if (err.response && err.response.data) {
+            setError(err.response.data.message || 'Registration failed!');
+          } else {
+            setError('An error occurred. Please try again later.');
+          }
+        });
+    }catch (err) {
+      setError('An unexpected error occurred. Please try again later.');
+    }
+
   };
 
   return (
