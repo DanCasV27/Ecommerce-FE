@@ -1,59 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Table, Container } from 'react-bootstrap';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
-    const [formData, setFormData] = useState({ id: null, name: '' });
-    const [isEditing, setIsEditing] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get('/api/auth/users');
+                setUsers(response.data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isEditing) {
-            setUsers(users.map(user => (user.id === formData.id ? formData : user)));
-        } else {
-            setUsers([...users, { ...formData, id: Date.now() }]);
-        }
-        setFormData({ id: null, name: '' });
-        setIsEditing(false);
-    };
-
-    const handleEdit = (user) => {
-        setFormData(user);
-        setIsEditing(true);
-    };
-
-    const handleDelete = (id) => {
-        setUsers(users.filter(user => user.id !== id));
-    };
+        fetchUsers();
+    }, []);
 
     return (
-        <div>
-            <h1>Admin User Management</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="User Name"
-                    required
-                />
-                <button type="submit">{isEditing ? 'Update User' : 'Add User'}</button>
-            </form>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>
-                        {user.name}
-                        <button onClick={() => handleEdit(user)}>Edit</button>
-                        <button onClick={() => handleDelete(user.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <Container>
+            <h1 className="mt-4">Admin Users</h1>
+            <Table striped bordered hover className="mt-3">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user) => (
+                        <tr key={user.email}>
+                            <td>{user.email}</td>
+                            <td>{user.role}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </Container>
     );
 };
 

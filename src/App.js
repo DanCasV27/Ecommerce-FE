@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminProducts from './pages/AdminProducts';
+import AdminUsers from './pages/AdminUsers';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
               <Nav.Link as={Link} to="/login">Login</Nav.Link>
               <Nav.Link as={Link} to="/register">Register</Nav.Link>
               <Nav.Link as={Link} to="/admin/products">Admin Products</Nav.Link>
+              <Nav.Link as={Link} to="/admin/users">Admin users</Nav.Link>
+
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -26,6 +29,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+\          <Route path="/admin/users" element={<AdminUsers />} />
+          {/* Add more routes as needed */}
           <Route path="/" element={<h1>Welcome to My Ecommerce App</h1>} />
         </Routes>
       </Container>
