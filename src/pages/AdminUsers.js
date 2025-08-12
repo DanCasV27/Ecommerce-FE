@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Container } from 'react-bootstrap';
+import { API_URL } from '../config';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
@@ -8,8 +9,8 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('/api/auth/users');
-                setUsers(response.data);
+                const response = await axios.get(`${API_URL}/auth/users`); // Adjust API_URL as needed
+                    setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
