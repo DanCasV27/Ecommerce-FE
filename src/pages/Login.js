@@ -1,16 +1,28 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { API_URL } from '../config'; // Adjust the import path as needed
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     // Add your login logic here
     setError(''); // clear errors before login attempt
     // Example: call your API and set error if login fails
+    try {
+     const res=await axios.post(`${API_URL}/auth/login` ,{ email, password })  
+      console.log('Login successful ', res.data);
+     
+    }catch (err) {
+      const message= err.response && err.response.data && err.response.data.message
+        ? err.response.data.message
+        : 'An unexpected error occurred. Please try again later.';
+      setError(message);
+    }
   };
 
   return (
